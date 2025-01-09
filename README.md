@@ -31,6 +31,8 @@ To run this project locally, follow these steps:
 
 
 `cd voice-to-text`
+
+
 3. Open the `index.html` file in your preferred web browser.
 
 4. The application should start immediately. You can click the Start Recording button to begin speech recognition and see the text appear on the screen. Use the Stop Recording button to end the recognition session. You can also toggle between English and Polish by clicking the respective language buttons.
