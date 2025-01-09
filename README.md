@@ -24,3 +24,22 @@ To run this project locally, follow these steps:
 1. Clone this repository:
    ```bash
    git clone https://github.com/your-username/voice-to-text.git
+
+
+
+2. Navigate to the project folder:
+
+
+`cd voice-to-text`
+3. Open the `index.html` file in your preferred web browser.
+
+4. The application should start immediately. You can click the Start Recording button to begin speech recognition and see the text appear on the screen. Use the Stop Recording button to end the recognition session. You can also toggle between English and Polish by clicking the respective language buttons.
+
+## Troubleshooting
+Make sure your browser supports the Web Speech API (e.g., Chrome, Firefox, or Edge).
+Ensure your microphone is properly connected and accessible to the browser.
+Contributing
+Feel free to fork this repository, make improvements, and submit a pull request. Any contributions are welcome!
+
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
