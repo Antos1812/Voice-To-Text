@@ -1,23 +1,26 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="style.css">
     <title>Voice to Text</title>
 </head>
 <body>
     <h1>Voice to Text</h1>
+    <div id="language-buttons">
+        <button id="lang-en" class="lang-button">Change to English</button>
+        <button id="lang-pl" class="lang-button">Zmień na polski</button>
+    </div>
+
     <button id="start-btn">Start Recording</button>
     <button id="stop-btn" disabled>Stop Recording</button>
-    <button id="lang-en">Zmień na angielski</button>
-    <button id="lang-pl">Zmień na polski</button>
+
     <p><strong>Transcription:</strong></p>
     <div id="transcription" style="border: 1px solid #ccc; padding: 10px; min-height: 50px;"></div>
+
     <h2>Live Audio Input</h2>
     <canvas id="audio-visualizer" width="300" height="100" style="border: 1px solid #ccc;"></canvas>
-
 
     <script src="script.js"></script>
 </body>
