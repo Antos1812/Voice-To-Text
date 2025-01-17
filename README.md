@@ -2,6 +2,9 @@
 
 This project is a simple **Voice to Text** application built using the **Web Speech API** and the **HTML5 Audio API**. The application allows users to convert their speech into text in real-time, with the ability to switch between English and Polish languages. Additionally, it features an audio visualizer that displays the frequency spectrum of the user's microphone input.
 
+![image](https://github.com/user-attachments/assets/0060cfc5-248b-47cb-9592-192997078697)
+
+
 ## Features
 
 - **Speech Recognition**: Converts spoken words into text in real-time.
