@@ -1,12 +1,30 @@
-// Comments
 const startBtn = document.getElementById("start-btn");
         const stopBtn = document.getElementById("stop-btn");
         const transcriptionDiv = document.getElementById("transcription");
         const langEnBtn = document.getElementById("lang-en");
         const langPlBtn = document.getElementById("lang-pl");
+        const canvas = document.getElementById("audio-visualizer");
+        const audioStartBtn = document.getElementById("audio-start");
+        const canvasContext = canvas.getContext("2d");
 
         let recognition;
         let language = "pl-PL";
+        let fullTranscription = "";
+
+        function changeLanguage(lang) {
+            if (recognition) recognition.stop();
+            language = lang === 'en' ? "en-US" : "pl-PL";
+            recognition.lang = language;
+
+            if (lang === 'en') {
+                langEnBtn.classList.add("active");
+                langPlBtn.classList.remove("active");
+            } else {
+                langPlBtn.classList.add("active");
+                langEnBtn.classList.remove("active");
+            }
+            console.log("Język zmieniony na " + (lang === 'en' ? "angielski" : "polski"));
+        }
 
         if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -16,11 +34,15 @@ const startBtn = document.getElementById("start-btn");
             recognition.continuous = true;
 
             recognition.onresult = (event) => {
-                let transcript = "";
+                let interimTranscript = "";
                 for (let i = event.resultIndex; i < event.results.length; i++) {
-                    transcript += event.results[i][0].transcript;
+                    if(event.results[i].isFinal){
+                        fullTranscription+= event.results[i][0].transcript + " ";
+                    } else {
+                        interimTranscript += event.results[i][0].transcript;
+                    }
                 }
-                transcriptionDiv.innerText = transcript;
+                transcriptionDiv.innerText = fullTranscription + interimTranscript;
             };
 
             recognition.onerror = (event) => {
@@ -50,27 +72,30 @@ const startBtn = document.getElementById("start-btn");
                 recognition.stop();
             }
         });
+        
+        const saveBtn = document.createElement("button");
+        saveBtn.innerText = "Save text";
+        document.body.appendChild(saveBtn);
 
-        langEnBtn.addEventListener("click", () => {
-            language = "en-US";
-            recognition.lang = language;
-            console.log("Język zmieniony na angielski");
+        saveBtn.addEventListener("click", () => {
+            const blob = new Blob([fullTranscription], { type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "transcription.txt";
+            a.click();
+            URL.revokeObjectURL(url);
         });
 
-        langPlBtn.addEventListener("click", () => {
-            language = "pl-PL";
-            recognition.lang = language;
-            console.log("Język zmieniony na polski");
-        });
+        langEnBtn.addEventListener("click", () => changeLanguage('en'));
+        langPlBtn.addEventListener("click", () => changeLanguage('pl'));
 
-        const canvas = document.getElementById("audio-visualizer");
-        const canvasContext = canvas.getContext("2d");
-
+        let audioContext, analyser, microphone;
         navigator.mediaDevices.getUserMedia({ audio: true, video: false })
             .then((stream) => {
-                const audioContext = new AudioContext();
-                const analyser = audioContext.createAnalyser();
-                const microphone = audioContext.createMediaStreamSource(stream);
+                audioContext = new AudioContext();
+                analyser = audioContext.createAnalyser();
+                microphone = audioContext.createMediaStreamSource(stream);
                 const dataArray = new Uint8Array(analyser.frequencyBinCount);
                 analyser.fftSize = 256;
                 microphone.connect(analyser);
@@ -93,9 +118,10 @@ const startBtn = document.getElementById("start-btn");
                     requestAnimationFrame(visualize);
                 }
 
-                visualize();
-            })
-            .catch((err) => {
-                console.error("Błąd dostępu do mikrofonu:", err);
-                alert("Nie udało się uzyskać dostępu do mikrofonu.");
+                audioStartBtn.addEventListener("click", () => {
+                    audioContext.resume().then(() => {
+                        console.log("AudioContext uruchomiony.");
+                        visualize();
+                    });
+                });
             });
